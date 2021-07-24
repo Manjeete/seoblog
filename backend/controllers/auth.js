@@ -35,9 +35,9 @@ exports.signup = (req,res) =>{
 };
 
 
-exports.signin = (req,res) => {
+exports.signin = async (req,res) => {
     const {email,password} = req.body
-    User.findOne({email:email}).exec((err,user) => {
+    await User.findOne({email:email}).exec((err,user) => {
         if(err || !user){
             return res.status(400).json({
                 error:"User with that email does not exist. Please Signup"
@@ -55,7 +55,7 @@ exports.signin = (req,res) => {
         const token = jwt.sign({_id:user._id},process.env.JWT_SECRET,{expiresIn:'1d'});
         res.cookie('token',token,{expiresIn:'1d'});
         const {_id,username,name,email,role} = user;
-        return res.json({
+        return res.satus(200).json({
             token,
             user:{_id,username,name,email,role}
         });
