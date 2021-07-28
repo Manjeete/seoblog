@@ -1,5 +1,6 @@
 import fetch from "isomorphic-fetch";
 import cookie from 'js-cookie';
+import next from "next";
 
 import { API } from "../config";
 
@@ -8,11 +9,12 @@ export const signup = async(user) =>{
         method:'POST',
         headers:{
             Accept:'application/json',
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
         },
         body:JSON.stringify(user)
     })
         .then(response =>{
+            console.log(response.data)
             return response.json();
         })
         .catch(err =>console.log(err));
@@ -32,6 +34,23 @@ export const signin = user =>{
         })
         .catch(err =>console.log(err))
 }
+
+
+// logout => then remove cookie and localStorage
+export const signout = (next) =>{
+    removeCookie('token')
+    removeLocalStorage('user')
+    next()
+
+    return fetch (`${API}/signout`,{
+        method:'GET'
+    })
+    .then(response => {
+        console.log("signout success")
+    })
+    .catch(err => console.log(err));
+
+};
 
 //set cookie
 export const setCookie = (key,value) =>{
@@ -55,7 +74,7 @@ export const removeCookie = (key)=>{
 // get cookie
 export const getCookie = (key)=>{
     if(process.browser){
-        cookie.get(key)
+        return cookie.get(key)
     }
 };
 
