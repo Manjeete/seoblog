@@ -8,7 +8,7 @@ require('dotenv').config()
 
 //bring routes
 const blogRoutes = require('./routes/blog')
-const authRoutes = require('./routes/auth')
+const authRoutes = require('./routes/authRouter')
 
 // APP
 
